@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const cors = require('cors');
+const database = require('./database');
 const port = process.env.PORT;
 
 // middleware
