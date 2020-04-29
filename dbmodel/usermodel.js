@@ -24,11 +24,11 @@ const userSchema = mongoose.Schema({
     },
     createdAt: {
         type: String,
-        default: moment.defaultFormat('dd/mm/yyyy') + ';' + moment().format('hh:mm:ss')
+        default: moment().format('dd/mm/yyyy') + ';' + moment().format('hh:mm:ss')
     },
     updateddAt: {
         type: String,
-        default: moment.defaultFormat('dd/mm/yyyy') + ';' + moment().format('hh:mm:ss')
+        default: moment().format('dd/mm/yyyy') + ';' + moment().format('hh:mm:ss')
     },
     isActive: {
         default: Boolean
@@ -37,8 +37,8 @@ const userSchema = mongoose.Schema({
 });
 
 // create user model
-mongoose.model('usersmodel', userSchema);
+mongoose.model('usermodel', userSchema);
 
 //export module
 
-module.exports('usermodel');
+module.exports = mongoose.model('usermodel');
