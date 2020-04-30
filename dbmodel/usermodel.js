@@ -16,7 +16,8 @@ const userSchema = mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
@@ -24,11 +25,11 @@ const userSchema = mongoose.Schema({
     },
     createdAt: {
         type: String,
-        default: moment().format('dd/mm/yyyy') + ';' + moment().format('hh:mm:ss')
+        default: moment().format('DD/MM/YYYY') + ';' + moment().format('hh:mm:ss')
     },
     updateddAt: {
         type: String,
-        default: moment().format('dd/mm/yyyy') + ';' + moment().format('hh:mm:ss')
+        default: moment().format('DD/MM/YYYY') + ';' + moment().format('hh:mm:ss')
     },
     isActive: {
         default: Boolean
