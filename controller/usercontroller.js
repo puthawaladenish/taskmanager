@@ -66,7 +66,49 @@ router.post('/register', [
         });
     });
 });
+// login user route
+router.post('/login', [
+            check('password').not().isEmpty().trim().escape(),
+            check('email').isEmail().normalizeEmail()
+        ],
+        (req, res) => {
+            const error = validationResult(req);
+            if (error.isEmpty === false) {
+                res.json({
+                    status: false,
+                    message: 'Login id password has problem',
+                    error: error.array()
+                });
+            }
+            usermodel.findOne({ email: req.body.email },
+                (err, result) => {
+                    if (err) {
+                        res.json({
+                            status: false,
+                            message: 'DB read fail',
+                            err: error
+                        });
+                    }
+                    if (!result) {
+                        res.json({
+                            status: false,
+                            message: 'User don\'t exist'
+                        });
+                    }
+                    // passsword match
+                    const isPasswordmatch = bcrypt.compareSync(req.body.password, result.password)
+                    if (!isPasswordmatch) {
+                        res.json({
+                            status: false,
+                            message: 'password not match'
+                        });
+                    }
+                    const token = jwt.sign({
 
+                    })
 
-//export router
-module.exports = router;
+                }
+            );
+
+            //export router
+            module.exports = router;
