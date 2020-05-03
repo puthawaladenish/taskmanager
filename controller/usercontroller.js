@@ -72,7 +72,7 @@ router.post('/login', [
     check('password').not().isEmpty().trim().escape()
 ], (req, res) => {
     const error = validationResult(req);
-    if (error.isEmpty === false) {
+    if (error.isEmpty() === false) {
         res.json({
             status: false,
             message: 'Login id password has problem',
