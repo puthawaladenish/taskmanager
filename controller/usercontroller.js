@@ -120,5 +120,52 @@ router.post('/login', [
     );
 });
 
+// verify token route
+router.post('/VarifyToken', (req, res) => {
+    //read token from http header
+    const token = req.header['x-access-token'];
+    // check token
+    if (!token) {
+        res.json({
+            status: false,
+            message: 'Token not Provided'
+        });
+    }
+    //token varification
+    jwt.verify(token, token_key, (error, decoded) => {
+        if (error) {
+            res.json({
+                status: false,
+                message: 'Fail to varify token.',
+                error: error
+            });
+        }
+        //OK
+        usermodel.findById(
+            decoded.id, (error, result) => {
+                // check db error
+                if (error) {
+                    res.json({
+                        status: false,
+                        message: 'fail to read from database',
+                        error: error
+                    });
+                }
+                if (!result) {
+                    res.json({
+                        status: false,
+                        message: 'user don\'t exist. Invalid ID',
+                    });
+                }
+                res.json({
+                    status: true,
+                    message: 'Token valid',
+                    result: result
+                });
+            }
+        );
+    });
+});
+
 //export router
 module.exports = router;
