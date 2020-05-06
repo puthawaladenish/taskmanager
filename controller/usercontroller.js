@@ -6,6 +6,7 @@ const bodyparser = require('body-parser');
 const { check, validationResult } = require('express-validator');
 const token_key = process.env.TOKEN_KEY;
 const usermodel = require('../dbmodel/usermodel');
+const moment = require('moment');
 
 
 // middleware setup
@@ -167,5 +168,42 @@ router.post('/VarifyToken', (req, res) => {
     });
 });
 
+
+// Update User Route
+router.put('/update', [
+    check('firstName').not().isEmpty().trim().escape(),
+    check('lastName').not().isEmpty().trim().escape(),
+    check('email').isEmail().normalizeEmail()
+], (req, res) => {
+    const error = validationResult(req);
+    if (error.isEmpty === false) {
+        res.json({
+            status: false,
+            message: 'From data validation error',
+            error: error.array()
+        });
+    }
+    // Update User Document
+    usermodel.findOneAndUpdate({
+        email: req.body.email
+    }, {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        updatedAt: moment().format('DD/MM/YYYY') + ';' + moment().format('hh:mm:ss')
+    }, (error, result) => {
+        if (error) {
+            res.json({
+                status: false,
+                message: 'Fail to update userdata',
+                error: error
+            });
+        }
+        res.json({
+            status: true,
+            message: 'user data update successfullt',
+            result: result
+        });
+    });
+});
 //export router
 module.exports = router;
