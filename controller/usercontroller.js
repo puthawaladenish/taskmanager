@@ -123,7 +123,7 @@ router.post('/login', [
 // verify token route
 router.post('/VarifyToken', (req, res) => {
     //read token from http header
-    const token = req.header['x-access-token'];
+    const token = req.headers['x-access-token'];
     // check token
     if (!token) {
         res.json({
