@@ -7,12 +7,13 @@ const { check, validationResult } = require('express-validator');
 const token_key = process.env.TOKEN_KEY;
 const usermodel = require('../dbmodel/usermodel');
 const moment = require('moment');
+const verifyToken = require('./../middlewares/verify_token');
 
 
 // middleware setup
-
 router.use(bodyparser.json());
 router.use(bodyparser.urlencoded({ extended: true }));
+
 
 
 // router goes here
@@ -170,7 +171,7 @@ router.post('/VarifyToken', (req, res) => {
 
 
 // Update User Route
-router.put('/update', [
+router.put('/update', verifyToken, [
     check('firstName').not().isEmpty().trim().escape(),
     check('lastName').not().isEmpty().trim().escape(),
     check('email').isEmail().normalizeEmail()
@@ -200,7 +201,7 @@ router.put('/update', [
         }
         res.json({
             status: true,
-            message: 'user data update successfullt',
+            message: 'user data update successfully',
             result: result
         });
     });
