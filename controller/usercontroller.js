@@ -206,5 +206,64 @@ router.put('/update', verifyToken, [
         });
     });
 });
+
+// change password route
+router.put('/changePassword', varifyToken, [
+
+    check('oldPassword').not().isEmpty().trim().escape(),
+    check('newPassword').not().isEmpty().trim().escape()
+], (req, res) => {
+    //check validation error
+    const error = validationResult(req);
+    if (error.isEmpty === false) {
+        res.json({
+            status: false,
+            message: 'From data validation error',
+            error: error.array()
+        });
+    }
+    // update user password in database
+    usermodel.findById(
+        req.userId, (error, result) => {
+            if (error) {
+                res.json({
+                    status: false,
+                    message: 'fail to read password',
+                    error: error
+                });
+            }
+            //everything OK in user document read
+            const isPasswordMatch = brypt.compareSync(req.body.oldPassword, result.password)
+                // password not match
+            if (!isPasswordMatch) {
+                res.json({
+                    status: false,
+                    message: 'password not match'
+                });
+            }
+            // if password match
+            const newPasswordHash = bcrypt.hashSync(req.body.newPassword, 10);
+            usermodel.findByIdAndUpdate(
+                req.userId, { password: newPasswordHash },
+                (error, result) => {
+                    if (error) {
+                        res.json({
+                            status: false,
+                            message: 'Database update failed',
+                            error: error
+                        });
+                    }
+                    //password updated
+                    res.json({
+                        status: true,
+                        message: 'Password successfully updated',
+                        result: result
+                    });
+                }
+            );
+        }
+    );
+});
+
 //export router
 module.exports = router;
