@@ -208,8 +208,7 @@ router.put('/update', verifyToken, [
 });
 
 // change password route
-router.put('/changePassword', varifyToken, [
-
+router.put('/changePassword', verifyToken, [
     check('oldPassword').not().isEmpty().trim().escape(),
     check('newPassword').not().isEmpty().trim().escape()
 ], (req, res) => {
@@ -233,8 +232,8 @@ router.put('/changePassword', varifyToken, [
                 });
             }
             //everything OK in user document read
-            const isPasswordMatch = brypt.compareSync(req.body.oldPassword, result.password)
-                // password not match
+            const isPasswordMatch = bcrypt.compareSync(req.body.oldPassword, result.password);
+            // password not match
             if (!isPasswordMatch) {
                 res.json({
                     status: false,

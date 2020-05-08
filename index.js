@@ -7,10 +7,12 @@ const cors = require('cors');
 const database = require('./database');
 const port = process.env.PORT;
 const usercontroller = require('./controller/usercontroller');
+const taskcontroller = require('./controller/taskcontroller');
 // middleware
 app.use(morgan('dev'));
 app.use(cors());
 app.use('/api/user', usercontroller);
+app.use('/api/user', taskcontroller);
 
 
 
