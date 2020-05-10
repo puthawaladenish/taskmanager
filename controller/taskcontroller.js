@@ -1,13 +1,11 @@
 //init code
 const router = require('express').Router();
-
-const jwt = require('jsonwebtoken');
 const bodyparser = require('body-parser');
 const { check, validationResult } = require('express-validator');
-const token_key = process.env.TOKEN_KEY;
-const task = require('./../dbmodel/taskmodel');
+const taskmodel = require('./../dbmodel/taskmodel');
 const moment = require('moment');
 const verifyToken = require('./../middlewares/verify_token');
+
 
 // middleware setup
 router.use(bodyparser.json());
@@ -28,24 +26,39 @@ router.all('/', (req, res) => {
 router.post('/newTask', verifyToken, [
     // check empty fields
     check('title').not().isEmpty().trim().escape(),
-    check('description').not().isEmpty().trim(), escape(),
+    check('description').not().isEmpty().trim().escape(),
     check('deadline').not().isEmpty().trim().escape()
 ], (req, res) => {
     // check form data validation error
     const errors = validationResult(req);
-    if (error.isEmpty() === false) {
+    if (errors.isEmpty() === false) {
         res.json({
             status: true,
             message: 'Task - Form data validation error',
             error: errors.array()
         });
     }
-    //ok
-    res.json({
-        status: true,
-        message: 'Task Form data Ok',
-        result: req.body,
+
+    // new task objet/model
+    const temp = new taskmodel({
+        title: req.body.title,
+        description: req.body.description,
+        deadline: req.body.deadline,
         userID: req.userID
+    });
+    temp.save((error, result) => {
+        if (error) {
+            res.json({
+                status: false,
+                message: 'Fail to create Task',
+                error: error
+            });
+        }
+        res.json({
+            status: true,
+            message: 'New task created successfully',
+            result: result
+        });
     });
 });
 

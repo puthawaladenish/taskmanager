@@ -28,7 +28,7 @@ const taskSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    UserID: {
+    userID: {
         type: String,
         required: true
     }
@@ -36,7 +36,7 @@ const taskSchema = mongoose.Schema({
 
 // Create Task Model
 
-mongoose.model('tasks', 'taskSchema');
+mongoose.model('tasks', taskSchema);
 
 
 //module export

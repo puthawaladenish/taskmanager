@@ -39,7 +39,7 @@ function verifyToken(req, res, next) {
                     });
                 }
                 //output final result
-                req.userId = result._id;
+                req.userID = result._id;
                 next();
             }
         );
