@@ -62,6 +62,34 @@ router.post('/newTask', verifyToken, [
     });
 });
 
+// read all task from user
+router.get('/getAllTask', verifyToken,
+(req, res) => {
+    taskmodel.find({ userID: req.userID },
+        (error, result) => {
+            if (error) {
+                res.json({
+                    status: false,
+                    message: 'task read failed db error',
+                    error: error
+                });
+            }
+            // check data empty
+            if (!result) {
+                res.json({
+                    status: false,
+                    message: 'no task found',
+                });
+            }
+            res.json({
+                status: true,
+                message: ' task success',
+                result: result
+            })
+        }
+    });
+});
 
-// export router
+
+
 module.exports = router;

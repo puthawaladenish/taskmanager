@@ -223,7 +223,7 @@ router.put('/changePassword', verifyToken, [
     }
     // update user password in database
     usermodel.findById(
-        req.userId, (error, result) => {
+        req.userID, (error, result) => {
             if (error) {
                 res.json({
                     status: false,
