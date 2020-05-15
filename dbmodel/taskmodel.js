@@ -20,7 +20,7 @@ const taskSchema = mongoose.Schema({
         type: String,
         default: moment().format('DD/MM/YYYY') + ';' + moment().format('hh:mm:ss')
     },
-    createdOn: {
+    updatededOn: {
         type: String,
         default: moment().format('DD/MM/YYYY') + ';' + moment().format('hh:mm:ss')
     },
